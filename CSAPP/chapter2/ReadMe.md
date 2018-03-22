@@ -45,4 +45,5 @@ test result:
                     int c = a / b;
                     printf("%d", c); //exception
     因为代码段1中objdump反汇编代码，除以-1被优化成负指令neg，所以没有发生溢出。
+    而代码段2中a/b用IDIV实现，不生成OF标志，这里是linux对异常类型发出SIGFPE信号，判断出除法错异常。
 ```
