@@ -4,4 +4,4 @@
 
 ## 目录
 
-[chapter2](./charpter2)
+[chapter2](./chapter2)
