@@ -7,6 +7,7 @@
 位级运算的常见用法是**掩码运算**。掩码表示从一个字中选出位的集合。例：```x=0x89ABCDEF```，位运算```x&0xFF```得到表达式```0x000000EF```。32位机器可写掩码为0xFFFFFFFF，但这样不可移植。
 
 **程序：**
+
 1.1 十六进制输出int、float、pointer：[show_bytes](./show_bytes.c)
 ```
 /*
@@ -28,6 +29,20 @@ test result:
 
 
 **2.整数表示**
+
 下图为32位机器上整型数据类型范围：
 <img src="./pic/data_type_scope.png" width = "650" height = "250" alt="data_type_scope" align=center />
 
+无符号编码和补码编码的内容直接看式子可能并不好懂，结合书中的位向量图便于理清从位向量到整数的映射。
+
+```
+补充：
+    为什么代码段1:   int a = 0x80000000;
+                    int b = a / -1;
+                    printf("%d", b); //-2147483648
+       而代码段2:    int a = 0x80000000;
+                    int b = -1;
+                    int c = a / b;
+                    printf("%d", c); //exception
+    因为代码段1中objdump反汇编代码，除以-1被优化成负指令neg，所以没有发生溢出。
+```
