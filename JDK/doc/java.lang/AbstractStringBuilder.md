@@ -1,5 +1,7 @@
 # AbstractStringBuilder
 > 字符序列的抽象实现，是StringBuilder和StringBuffer的父类
+**注：不完全分析**
+[TOC]
 
 - 内部变量
 ```Java
@@ -205,23 +207,6 @@ public AbstractStringBuilder delete(int start, int end) {
 
 - 删除索引为index的char
 ```Java
-public AbstractStringBuilder delete(int start, int end) {
-    int count = this.count;
-    if (end > count) {
-        end = count;
-    }
-    checkRangeSIOOBE(start, end, count);
-    int len = end - start;
-    if (len > 0) {
-        shift(end, -len);
-        this.count = count - len;
-    }
-    return this;
-}
-```
-
-- 删除[start, end)范围内的char
-```Java
 public AbstractStringBuilder deleteCharAt(int index) {
     checkIndex(index, count);
     shift(index + 1, -1);
@@ -229,5 +214,129 @@ public AbstractStringBuilder deleteCharAt(int index) {
     return this;
 }
 ```
+
+## 插入
+- 向ASB的dstOffset索引处插入一个子序列s
+```Java
+public AbstractStringBuilder insert(int dstOffset, CharSequence s) {
+    if (s == null) {
+        s = "null";
+    }
+    if (s instanceof String) {
+        return this.insert(dstOffset, (String)s);
+    }
+    return this.insert(dstOffset, s, 0, s.length());
+}
+```
+
+- 向ASB的dstOffset索引处插入一个子序列，该子序列取自字符序列s的[start, end)范围
+```Java
+public AbstractStringBuilder insert(int dstOffset, CharSequence s,
+                                    int start, int end)
+{
+    if (s == null) {
+        s = "null";
+    }
+    checkOffset(dstOffset, count);
+    checkRange(start, end, s.length());
+    int len = end - start;
+    ensureCapacityInternal(count + len);
+    shift(dstOffset, len);
+    count += len;
+    putCharsAt(dstOffset, s, start, end);
+    return this;
+}
+```
+
+## 替换
+- 向ASB的dstOffset索引处插入一个子序列，该子序列取自字符序列s的[start, end)范围
+```Java
+public AbstractStringBuilder replace(int start, int end, String str) {
+    int count = this.count;
+    if (end > count) {
+        end = count;
+    }
+    checkRangeSIOOBE(start, end, count);
+    int len = str.length();
+    int newCount = count + len - (end - start);
+    ensureCapacityInternal(newCount);
+    shift(end, newCount - count);
+    this.count = newCount;
+    putStringAt(start, str);
+    return this;
+}
+```
+
+## 求子串
+- 求ASB在[start, ∞)范围内的子串
+```Java
+public String substring(int start) {
+    return substring(start, count);
+}
+```
+
+- 求ASB在[start, start+end)范围内的子串
+```Java
+public String substring(int start, int end) {
+    checkRangeSIOOBE(start, end, count);
+    if (isLatin1()) {
+        return StringLatin1.newString(value, start, end - start);
+    }
+    return StringUTF16.newString(value, start, end - start);
+}
+```
+
+## 容量
+- 返回当前ASB的容量（可以容纳的char的数量）
+```Java
+public int capacity() {
+    return value.length >> coder;
+}
+```
+
+- 确保ASB内部拥有最小容量minimumCapacity
+```Java
+public void ensureCapacity(int minimumCapacity) {
+    if (minimumCapacity > 0) {
+        ensureCapacityInternal(minimumCapacity);
+    }
+}
+```
+
+## 比较
+- 返回当前ASB内包含的char的数量
+
+注意：此方法返回的并不是字符的数量，因为对于Unicode增补字符1个代码点对应2个代码单元。可以通过codePointCount方法获取字符数。
+```Java
+@Override
+public int length() {
+    return count;
+}
+```
+
+## 越界检查
+```Java
+    /*▼ 越界检查 ████████████████████████████████████████████████████████████████████████████████┓ */
+    /* IndexOutOfBoundsException, if out of bounds */
+    // 保证0<=start<=end<=len
+    private static void checkRange(int start, int end, int len) {
+        if(start<0 || start>end || end>len) {
+            throw new IndexOutOfBoundsException("start " + start + ", end " + end + ", length " + len);
+        }
+    }
+    /* StringIndexOutOfBoundsException, if out of bounds */
+    // 保证0<=start<=end<=len
+    private static void checkRangeSIOOBE(int start, int end, int len) {
+        if(start<0 || start>end || end>len) {
+            throw new StringIndexOutOfBoundsException("start " + start + ", end " + end + ", length " + len);
+        }
+    }
+    /*▲ 越界检查 ████████████████████████████████████████████████████████████████████████████████┛ */
+
+```
+
+
+
+
 
 
