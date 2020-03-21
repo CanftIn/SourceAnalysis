@@ -1,2 +1,4 @@
 .idea
 .idea/*
+*.kotlin_module
+*.class
