@@ -15,3 +15,4 @@
 
 Object中有一个clone方法，为什么还必须要实现Cloneable接口呢，这就是cloneable接口这个标志接口的意义，只有实现了这个接口才能实现复制操作，因为jvm在复制对象的时候，会检查对象的类是否实现了Cloneable这个接口，如果没有实现，则会报CloneNotSupportedException异常。
 
+clone方法只有在进行复杂的“浅克隆”时效率才会明显高于new构造方式.
