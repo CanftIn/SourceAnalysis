@@ -2,3 +2,4 @@
 .idea/*
 *.kotlin_module
 *.class
+JDK/out/*
