@@ -31,8 +31,8 @@ public String toString() {
 
 *注：要求被克隆的对象所属的类实现Cloneable接口*
 ```Java
-    @HotSpotIntrinsicCandidate
-    protected native Object clone() throws CloneNotSupportedException;
+@HotSpotIntrinsicCandidate
+protected native Object clone() throws CloneNotSupportedException;
 ```
 
 - 对象在被GC回收后执行的清理操作。可能会引发OOM，建议使用java.lang.ref.Cleaner替代，Java9被弃用
