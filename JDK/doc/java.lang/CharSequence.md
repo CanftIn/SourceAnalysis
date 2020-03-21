@@ -1,4 +1,4 @@
-#CharSequence
+# CharSequence
 ---
 *interface* **CharSequence**
 
