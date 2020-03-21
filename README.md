@@ -19,3 +19,30 @@
 - JDK 源码分析
 
 [JDK](./JDK)
+```
+│
+├───doc
+│   ├───java.io
+│   │       Serializable.md
+│   │
+│   ├───java.lang
+│   │       AbstractStringBuilder.md
+│   │       Appendable.md
+│   │       CharSequence.md
+│   │       Cloneable.md
+│   │       Comparable.md
+│   │       Object.md
+│   │       Runable.md
+│   │       StringBuffer.md
+│   │       StringBuilder.md
+│   │       Void.md
+│   │
+│   └───tips
+└───src
+    └───com
+        └───canftin
+                AbstractStringBuilderTest.java
+                CharSequenceTest.java
+                CloneTest.java
+                SerializableTest.java
+```
